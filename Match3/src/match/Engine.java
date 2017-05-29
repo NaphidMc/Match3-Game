@@ -32,7 +32,7 @@ public class Engine extends BasicGame {
 	public static double consecutiveMatchTimer = consecutiveMatchTime;
 	public static java.awt.Rectangle bNewGame, bToggleTimer, bPauseGame;
 	static boolean mouse_down = false, timerToggledThisGame = false, timerOn = true, gameOver, gamePaused;
-	static final double timerMax = 15.0d, matchTimeIncrease = 1d;
+	static final double timerMax = 15.0d, matchTimeIncrease = 1.15d;
 	static final int timerWidth = 500, timerHeight = 15, timerX = boardOffsetX + 6, timerY = 55, consecutiveMatchMax = 6;
 	static double currentTimer = timerMax;	
 	
