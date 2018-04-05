@@ -31,7 +31,7 @@ public class Engine extends BasicGame {
 	public static final double consecutiveMatchTime = 2.0d;
 	public static double consecutiveMatchTimer = consecutiveMatchTime;
 	public static java.awt.Rectangle bNewGame, bToggleTimer, bPauseGame;
-	static boolean mouse_down = false, timerToggledThisGame = false, timerOn = true, gameOver, gamePaused;
+	static boolean mouse_down = false, timerToggledThisGame = false, timerOn = false, gameOver, gamePaused, timerManuallyTurnedOff = false, firstMoveMade = false;
 	static final double timerMax = 15.0d, matchTimeIncrease = 1.15d;
 	static final int timerWidth = 500, timerHeight = 15, timerX = boardOffsetX + 6, timerY = 55, consecutiveMatchMax = 6;
 	static double currentTimer = timerMax;	
@@ -127,7 +127,7 @@ public class Engine extends BasicGame {
 		g.fillRect(timerX, timerY, timerWidth, timerHeight);
 		
 		// Sets timer color depending on whether or not it is active
-		if(timerOn && !gameOver && !gamePaused) {
+		if((timerOn && !gameOver && !gamePaused) || (!gamePaused && !firstMoveMade)) {
 			g.setColor(Color.magenta);
 		} else {
 			g.setColor(Color.darkGray);
@@ -335,10 +335,11 @@ public class Engine extends BasicGame {
 		selectedGem = null;
 		score = 0;
 		timerToggledThisGame = false;
-		timerOn = true;
+		timerOn = false; // Timer doesn't start until first move is made
 		currentTimer = timerMax;
 		gameOver = false;
 		gamePaused = false;
+		firstMoveMade = false;
 		
 		// Makes sure that the board contains no matches at the start
 		// this should probably be replaced by something more efficient
@@ -366,11 +367,13 @@ public class Engine extends BasicGame {
 		if(bToggleTimer.contains(mouseX, mouseY) && !gamePaused && !gameOver) {
 			timerToggledThisGame = true;
 			timerOn = !timerOn;
+			timerManuallyTurnedOff =  !timerManuallyTurnedOff;
 		}
 		
 		if(bPauseGame.contains(mouseX, mouseY) && !gameOver) {
 			gamePaused = !gamePaused;
-			timerOn = !gamePaused;
+			if(!timerManuallyTurnedOff)
+				timerOn = !gamePaused;
 		}
 		
 		if(gemMoving || gamePaused || gameOver)
@@ -384,6 +387,10 @@ public class Engine extends BasicGame {
 			} else {
 				Gem gem = getGemAtCoordinates(mouseX, mouseY);
 				if(gem != null && isValidSwap(selectedGem, gem)) {
+					if(!timerManuallyTurnedOff) {
+						timerOn = true;
+						firstMoveMade = true;
+					}
 					swapGems(selectedGem, gem);
 				} else {
 					selectedGem = gem;
