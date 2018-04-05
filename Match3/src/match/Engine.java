@@ -17,7 +17,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
 public class Engine extends BasicGame {
-	
+	// Change
 	private static SpriteSheet spritesheet = null;
 	public static int boardOffsetX = 280, boardOffsetY = 80; // Game board offset
 	public static int spriteSize = 64;
